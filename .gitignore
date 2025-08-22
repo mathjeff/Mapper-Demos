@@ -1,2 +1,3 @@
 *.swp
-mapper.jar
+*.jar
+out.sam
