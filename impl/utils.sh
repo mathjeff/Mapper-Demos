@@ -61,6 +61,7 @@ function quiz() {
     fi
     if [ "$userLine" == "$rightAnswerLine" ]; then
       echo "That's right!";
+      echo
       return
     else
       echo "You chose '$userLine'"
