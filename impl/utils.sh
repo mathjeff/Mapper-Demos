@@ -33,3 +33,38 @@ function pause() {
   echo "(Press Enter to continue)"
   read
 }
+
+function quiz() {
+  # save answers
+  rm -f /tmp/quiz-answers
+  touch /tmp/quiz-answers
+  rightAnswer=""
+  while [ "$1" != "" ]; do
+    answer="$1"
+    if [ "$rightAnswer" == "" ]; then
+      rightAnswer="$answer"
+    fi
+    echo "$answer" >> /tmp/quiz-answers
+    shift
+  done
+  # order answers randomly
+  cat /tmp/quiz-answers | shuf | grep -n . > /tmp/shuffled-answers
+  cat /tmp/shuffled-answers
+  # output answers
+  rightAnswerLine="$(grep "$rightAnswer" /tmp/shuffled-answers)"
+  while true; do
+    read userInput
+    userLine="$(grep "$userInput" /tmp/shuffled-answers || true)"
+    if [ "$userLine" == "" ]; then
+      echo "That's not a choice - try again!"
+      continue;
+    fi
+    if [ "$userLine" == "$rightAnswerLine" ]; then
+      echo "That's right!";
+      return
+    else
+      echo "You chose '$userLine'"
+      echo "That's not the answer we had in mind. Try again!"
+    fi
+  done
+}
