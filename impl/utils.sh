@@ -1,5 +1,19 @@
 # This is a utility script to be sourced by individual demos
 
+COLOR_RED="\033[31m"
+COLOR_GREEN="\033[32m"
+COLOR_YELLOW="\033[33m"
+COLOR_BLUE="\033[34m"
+COLOR_PURPLE="\033[35m"
+COLOR_CYAN="\033[36m"
+
+COLOR_CLEAR="\033[0m"
+
+# outputs the given message in an instructional color
+function say() {
+  echo -e "${COLOR_CYAN}$*${COLOR_CLEAR}"
+}
+
 function displayCommand() {
   echo "$ $*"
 }
@@ -30,7 +44,7 @@ function downloadMapper() {
 }
 
 function pause() {
-  echo "(Press Enter to continue)"
+  say "(Press Enter to continue)"
   read
 }
 
@@ -56,16 +70,16 @@ function quiz() {
     read userInput
     userLine="$(grep "$userInput" /tmp/shuffled-answers || true)"
     if [ "$userLine" == "" ]; then
-      echo "That's not a choice - try again!"
+      say "That's not a choice - try again!"
       continue;
     fi
     if [ "$userLine" == "$rightAnswerLine" ]; then
-      echo "That's right!";
+      say "That's right!";
       echo
       return
     else
-      echo "You chose '$userLine'"
-      echo "That's not the answer we had in mind. Try again!"
+      say "You chose '$userLine'"
+      say "That's not the answer we had in mind. Try again!"
     fi
   done
 }
