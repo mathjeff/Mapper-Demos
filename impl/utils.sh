@@ -20,7 +20,7 @@ function downloadMapper() {
   downloadCommand="curl -L $url -o $destFile"
   # download Mapper to the cache
   if [ ! -e "$destFile" ]; then
-    bash -c "$downloadCommand"
+    runCommand "$downloadCommand"
   else
     # We already downloaded Mapper but it might be more informative to re-display the download command again
     displayCommand "$downloadCommand"
