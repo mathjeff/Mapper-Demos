@@ -10,13 +10,19 @@ say "Let's download and run Mapper"
 pause
 downloadMapper
 say "Now let's run Mapper"
-runCommand "java -jar mapper.jar --queries queries.fasta --reference reference.fasta --out-sam out.sam --num-threads 8"
+runCommand "java -jar mapper.jar --queries queries.fasta --reference reference.fasta --out-sam out.sam --num-threads 8 2> mapper.log"
+runCommand "cat mapper.log"
 echo
 say "Now look at the Alignment rate above."
 pause
+runCommand "grep 'Alignment rate' mapper.log"
 say "For most reads, we didn't find an alignment to the reference"
 pause
 say "Now take a look at the Alignment Penalties Graph above. What does it say?"
+pause
+runCommand "grep -A 11 'Alignment Penalties Graph' mapper.log"
+echo
+say "What does this mean?"
 echo
 answer1="We observe larger differences between the query and the reference more often than smaller differences"
 answer2="We observe smaller differences between the query and the reference more often than larger differences"
@@ -36,9 +42,12 @@ say "This might be because Mapper skips queries that are <90% similar to the ref
 echo
 say "Let's run Mapper again, and ask it to also output alignments having >= 80% similarity"
 pause
-runCommand "java -jar mapper.jar --queries queries.fasta --reference reference.fasta --out-sam out.sam --num-threads 8 --max-penalty 0.2"
+runCommand "java -jar mapper.jar --queries queries.fasta --reference reference.fasta --out-sam out.sam --num-threads 8 --max-penalty 0.2 2> mapper.log"
+runCommand "cat mapper.log"
 echo
 say "Now check the Alignment rate again."
+pause
+runCommand "grep 'Alignment rate' mapper.log"
 say "We found an alignment for every query!"
 pause
 say "You might wonder why Mapper doesn't always look for the best alignment for every query by default"
