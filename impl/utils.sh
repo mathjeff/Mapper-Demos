@@ -9,6 +9,9 @@ COLOR_CYAN="\033[36m"
 
 COLOR_CLEAR="\033[0m"
 
+UTILS_FILE="${BASH_SOURCE[0]}"
+TEMP_DIR="$(dirname "$UTILS_FILE")"
+
 # outputs the given message in an instructional color
 function say() {
   echo -e "${COLOR_CYAN}$*${COLOR_CLEAR}"
@@ -50,25 +53,25 @@ function pause() {
 
 function quiz() {
   # save answers
-  rm -f /tmp/quiz-answers
-  touch /tmp/quiz-answers
+  rm -f $TEMP_DIR/.quiz-answers.ignore
+  touch $TEMP_DIR/.quiz-answers.ignore
   rightAnswer=""
   while [ "$1" != "" ]; do
     answer="$1"
     if [ "$rightAnswer" == "" ]; then
       rightAnswer="$answer"
     fi
-    echo "$answer" >> /tmp/quiz-answers
+    echo "$answer" >> $TEMP_DIR/.quiz-answers.ignore
     shift
   done
   # order answers randomly
-  cat /tmp/quiz-answers | shuf | grep -n . > /tmp/shuffled-answers
-  cat /tmp/shuffled-answers
+  cat $TEMP_DIR/.quiz-answers.ignore | shuf | grep -n . > $TEMP_DIR/.shuffled-answers.ignore
+  cat $TEMP_DIR/.shuffled-answers.ignore
   # output answers
-  rightAnswerLine="$(grep "$rightAnswer" /tmp/shuffled-answers)"
+  rightAnswerLine="$(grep "$rightAnswer" $TEMP_DIR/.shuffled-answers.ignore)"
   while true; do
     read userInput
-    userLine="$(grep "$userInput" /tmp/shuffled-answers || true)"
+    userLine="$(grep "$userInput" $TEMP_DIR/.shuffled-answers.ignore || true)"
     if [ "$userLine" == "" ]; then
       say "That's not a choice - try again!"
       continue;
